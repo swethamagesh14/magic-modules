@@ -61,7 +61,6 @@ async:
 exclude_sweeper: true
 include_in_tgc_next: true
 custom_code:
-  test_constants: 'templates/terraform/test_constants/import_servicenetworking.go.tmpl'
 examples:
   - name: 'netapp_backup'
     primary_resource_id: 'test_backup'
@@ -152,7 +151,6 @@ properties:
       Details of the ONTAP source volume and snapshot.
     required: false
     immutable: true
-    min_version: beta
     properties:
       - name: 'storagePool'
         type: String
@@ -172,6 +170,7 @@ properties:
         description: |
           The UUID of the ONTAP source snapshot.
         immutable: true
+        default_from_api: true
   - name: 'volumeRegion'
     type: String
     description: |
