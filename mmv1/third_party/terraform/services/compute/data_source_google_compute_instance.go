@@ -58,7 +58,11 @@ func dataSourceGoogleComputeInstanceRead(d *schema.ResourceData, meta interface{
 
 	// Set the networks
 	// Use the first external IP found for the default connection info.
-	networkInterfaces, _, internalIP, externalIP, err := flattenNetworkInterfaces(d, config, instance.NetworkInterfaces)
+	networkInterfacesRaw, err := networkInterfacesToInterface(instance.NetworkInterfaces)
+	if err != nil {
+		return err
+	}
+	networkInterfaces, _, internalIP, externalIP, err := flattenNetworkInterfaces(d, config, networkInterfacesRaw)
 	if err != nil {
 		return err
 	}
@@ -153,7 +157,7 @@ func dataSourceGoogleComputeInstanceRead(d *schema.ResourceData, meta interface{
 		return err
 	}
 
-	err = d.Set("guest_accelerator", flattenGuestAccelerators(instance.GuestAccelerators))
+	err = d.Set("guest_accelerator", flattenGuestAccelerators(guestAcceleratorsToInterface(instance.GuestAccelerators)))
 	if err != nil {
 		return err
 	}
